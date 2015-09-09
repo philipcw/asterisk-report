@@ -16,6 +16,7 @@ class CreateAccountCodesTable extends Migration
             $table->increments('id');
             $table->string('accountcode', 6);
             $table->string('name', 100);
+            $table->text('note');
             $table->timestamps();
         });
     }

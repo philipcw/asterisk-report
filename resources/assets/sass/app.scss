@@ -1,2 +1,24 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+body {
+	padding-top: 100px;
+}
+
+.form-control {
+	font-size: 18px;
+	padding: 24px;
+}
+
+th[data-sort] {
+	cursor: pointer;
+}
+
+/* Customize container 
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+*/
+
+

@@ -57,3 +57,32 @@ limit 10;
 		   ->orderByRaw('sum(billsec) desc')
 		   ->take(10)
 		   ->get();
+
+---------------------------------------
+
+select dst, count(dst), sum(billsec)
+from cdr
+where (calldate >= '2015-08-01 00:00:00' and calldate <= '2015-08-30 23:59:00') 
+	and outbound_cnum != ""
+	and disposition = "ANSWERED"
+
+group by dst
+order by count(dst) desc;
+
+
+select calldate, dst, cdr.accountcode, account_codes.name
+from cdr
+join account_codes on cdr.accountcode = account_codes.accountcode
+where (calldate >= '2015-08-01 00:00:00' and calldate <= '2015-08-30 23:59:00') 
+	and dst = "94197276"
+	and disposition = "ANSWERED"
+order by calldate asc
+
+
+select dst, count(dst), sum(billsec)
+from cdr 
+where accountcode = '3924'
+	and outbound_cnum != ""
+	and disposition = "ANSWERED"
+group by dst
+order by count(dst) desc;

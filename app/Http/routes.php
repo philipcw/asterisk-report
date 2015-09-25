@@ -20,5 +20,10 @@
  */
 
 Route::get('/', 'ReportController@index');
-Route::get('report', 'ReportController@report');
-Route::get('report/{accountcode}', 'ReportController@details');
+Route::post('report', 'ReportController@report');
+Route::get('report/full', 'ReportController@fullreport');
+Route::get('report/accountcode/{accountcode}', 'ReportController@usingAccountCode');
+Route::get('report/phonenumber/{number}', 'ReportController@usingPhoneNumber');
+
+
+Route::get('accountcodes', 'AccountCodeController@index');

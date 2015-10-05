@@ -13,6 +13,15 @@ th[data-sort] {
 	cursor: pointer;
 }
 
+.delete-form {
+	display: inline-block;	
+}
+
+.delete-btn {
+	border: none;
+	background: none;
+}
+
 /* Customize container 
 @media (min-width: 768px) {
   .container {

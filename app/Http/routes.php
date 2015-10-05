@@ -25,5 +25,10 @@ Route::get('report/full', 'ReportController@fullreport');
 Route::get('report/accountcode/{accountcode}', 'ReportController@usingAccountCode');
 Route::get('report/phonenumber/{number}', 'ReportController@usingPhoneNumber');
 
-
 Route::get('accountcodes', 'AccountCodeController@index');
+Route::post('accountcode', 'AccountCodeController@store');
+Route::get('accountcode/{id}/edit', 'AccountCodeController@edit');
+Route::patch('accountcode/{id}', 'AccountCodeController@update');
+Route::delete('accountcode/{id}', 'AccountCodeController@destroy');
+
+

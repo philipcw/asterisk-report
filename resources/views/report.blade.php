@@ -6,7 +6,7 @@
 	<br>
 	<div class="row">
 		<div class="col-sm-6">
-			<p class="lead">Persons who made the most calls.</p>
+			<p class="lead"><strong>Persons who made the most calls</strong></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -28,7 +28,7 @@
 			</table>	
 		</div>
 		<div class="col-sm-6">
-			<p class="lead">Numbers called the most. </p>
+			<p class="lead"><strong>Numbers called the most</strong></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>

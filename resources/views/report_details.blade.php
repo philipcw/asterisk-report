@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-sm-6">
-			<h2>{{ $name }} <br> <small>PIN #: {{ $accountcode }}</small></h2>
+			<h2>{{ $name }}</h2>
 			<h4><small>Date:</small> {{ $start_date }} - {{ $end_date }}</h4>
 			<h4><small>Total Calls:</small> {{ $totalcalls }}</h4>	
 			<h4><small>Total Cost:</small> $0.00</h4>
@@ -18,7 +18,7 @@
 
 	<div class="row">
 		<div class="col-sm-6">
-			<p class="lead">Call Summary.</p>
+			<p class="lead"><strong>Call Summary</strong></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -42,7 +42,7 @@
 			</table>	
 		</div>
 		<div class="col-sm-6">
-			<p class="lead">Detailed call list.</p>
+			<p class="lead"><strong>Detailed call list</strong></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>

@@ -14,7 +14,7 @@ class CreateAccountCodesTable extends Migration
     {
         Schema::create('account_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('accountcode', 6);
+            $table->string('accountcode', 6)->unique();
             $table->string('name', 100);
             $table->text('note');
             $table->timestamps();

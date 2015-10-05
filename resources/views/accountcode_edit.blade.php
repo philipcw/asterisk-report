@@ -36,8 +36,8 @@
 		</div>
 
 		<div class="col-md-4 col-md-offset-1">
-			<p class="lead">Add new account code.</p>
-			
+			<p class="lead">Edit account code - <strong>{{ $account->accountcode }}</strong></p>
+
 			@if (count($errors) > 0)
 			    <div class="alert alert-danger">
 			        <ul>
@@ -48,15 +48,14 @@
 			    </div>
 			@endif
 
-			<form action="/accountcode" method="POST">
+			<form action="/accountcode/{{ $account->id }}" method="POST">
 				{!! csrf_field() !!}
+				{!! method_field('PATCH') !!}
 				<div class="form-group">
-					<input type="text" class="form-control" name="name" placeholder="Name">	
+					<input type="text" class="form-control" name="name" placeholder="Name" value="{{ $account->name }}" required>	
 				</div>
-				<div class="form-group">
-					<input type="text" class="form-control" name="accountcode" placeholder="Account Code">	
-				</div>
-				<button type="submit" class="btn btn-primary"> Add new code</button>
+				
+				<button type="submit" class="btn btn-primary">Update</button>
 			</form>
 		</div>
 	</div>

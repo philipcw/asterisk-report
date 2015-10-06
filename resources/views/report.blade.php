@@ -21,7 +21,7 @@
 						<tr>
 							<td><a href="report/accountcode/{{ $call->accountcode }}">{{ ucwords(strtolower($call->name)) }}</a></td>
 							<td class="text-center">{{ $call->totalcalls }}</td>
-							<td class="text-center">{{ gmdate("H:i:s", $call->totalbill) }}</td>
+							<td class="text-center">{{ $call->formatTime() }}</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -43,7 +43,7 @@
 						<tr>
 							<td><a href="report/phonenumber/{{ $top_number->dst }}">{{ substr($top_number->dst, 1) }}</a></td>
 							<td class="text-center">{{ $top_number->totalcalls }}</td>
-							<td class="text-center">{{ gmdate("H:i:s", $top_number->totaltime) }}</td>
+							<td class="text-center">{{ $top_number->formatTime() }}</td>
 						</tr>
 					@endforeach
 				</tbody>

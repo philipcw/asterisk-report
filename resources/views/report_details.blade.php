@@ -34,7 +34,7 @@
 						<tr>
 							<td>{{ substr($number->dst, 1)  }}</td>
 							<td>{{ $number->totalcalls }}</td>
-							<td>{{ gmdate("H:i:s", $number->totaltime) }}</td>
+							<td>{{ $number->formatTime() }}</td>
 							<td></td>
 						</tr>
 					@endforeach
@@ -58,7 +58,7 @@
 						<tr>
 							<td>{{ $call->calldate->toDayDateTimeString() }}</td>
 							<td>{{ substr($call->dst, 1) }}</td>
-							<td>{{ gmdate("H:i:s", $call->billsec) }}</td>
+							<td>{{ $call->formatTime() }}</td>
 							<td></td>
 						</tr>
 					@endforeach

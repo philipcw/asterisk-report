@@ -32,7 +32,7 @@ class ReportController extends Controller
     	$start_date = $request->input('start-date');
     	$end_date = $request->input('end-date');
 
-    	$calls = Call::select(DB::raw('account_codes.name, src, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totalbill'))
+    	$calls = Call::select(DB::raw('account_codes.name, src, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totaltime'))
 				   ->join('account_codes', 'cdr.accountcode', '=', 'account_codes.accountcode')
 				   ->where('calldate', '>=', "$start_date 00:00:00")
 				   ->where('calldate', '<=', "$end_date 23:59:00")
@@ -78,7 +78,7 @@ class ReportController extends Controller
         $start_date = $request->session()->get('start_date');
         $end_date = $request->session()->get('end_date');
 
-        $calls = Call::select(DB::raw('account_codes.name, src, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totalbill'))
+        $calls = Call::select(DB::raw('account_codes.name, src, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totaltime'))
                    ->join('account_codes', 'cdr.accountcode', '=', 'account_codes.accountcode')
                    ->where('calldate', '>=', "$start_date 00:00:00")
                    ->where('calldate', '<=', "$end_date 23:59:00")
@@ -118,7 +118,7 @@ class ReportController extends Controller
     	$start_date = $request->session()->get('start_date');
     	$end_date = $request->session()->get('end_date');
 
-    	$calls = Call::select('calldate', 'dst', 'billsec')
+    	$calls = Call::select(DB::raw('calldate, dst, billsec as totaltime'))
 				   ->where('calldate', '>=', "$start_date 00:00:00")
 				   ->where('calldate', '<=', "$end_date 23:59:00")
 				   ->where('accountcode', '=', $accountcode)
@@ -159,7 +159,7 @@ class ReportController extends Controller
         $start_date = $request->session()->get('start_date');
         $end_date = $request->session()->get('end_date');
 
-        $calls = Call::select(DB::raw('calldate, account_codes.name, billsec'))
+        $calls = Call::select(DB::raw('calldate, account_codes.name, billsec as totaltime'))
                     ->join('account_codes', 'cdr.accountcode', '=', 'account_codes.accountcode')
                     ->where('calldate', '>=', "$start_date 00:00:00")
                     ->where('calldate', '<=', "$end_date 23:59:00")  

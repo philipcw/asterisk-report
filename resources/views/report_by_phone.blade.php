@@ -35,7 +35,7 @@
 					@foreach ($calls as $call)
 						<tr>
 							<td>{{ $call->calldate->toDayDateTimeString() }}</td>
-							<td>{{ gmdate("H:i:s", $call->billsec) }}</td>
+							<td>{{ $call->formatTime() }}</td>
 							<td>$0.00</td>
 							<td>{{ ucwords(strtolower($call->name)) }}</td>
 						</tr>

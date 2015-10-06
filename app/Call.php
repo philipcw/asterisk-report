@@ -19,4 +19,14 @@ class Call extends Model
      * @var array
      */
     protected $dates = ['calldate'];
+
+    /**
+     * [formatTime description]
+     * @return [type] [description]
+     */
+    public function formatTime()
+    {   
+        return sprintf('%02d:%02d:%02d', ($this->totaltime / 3600), 
+            ($this->totaltime / 60 % 60), $this->totaltime % 60); 
+    }
 }

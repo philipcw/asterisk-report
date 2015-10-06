@@ -6,11 +6,11 @@
 	<br>
 	<div class="row">
 		<div class="col-sm-6">
-			<p class="lead"><strong>Persons who made the most calls</strong></p>
+			<p class="lead text-center">Persons who made the most calls</p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th data-sort="string-ins">Name</th>
+						<th data-sort="string">Name</th>
 						<th class="text-center" data-sort="int"># of calls</th>
 						<th class="text-center" data-sort="string">Total Time</th>
 					</tr>
@@ -28,11 +28,11 @@
 			</table>	
 		</div>
 		<div class="col-sm-6">
-			<p class="lead"><strong>Numbers called the most</strong></p>
+			<p class="lead text-center">Numbers called the most</p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th data-sort="string-ins">Number</th>
+						<th>Number</th>
 						<th class="text-center" data-sort="int"># of calls</th>
 						<th class="text-center" data-sort="string">Total Time</th>
 					</tr>

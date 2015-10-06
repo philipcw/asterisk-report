@@ -139,11 +139,13 @@ class ReportController extends Controller
 
 		$name = $this->getAccountName($accountcode);
 		$totalcalls = $this->getTotalCallsMade($accountcode);
+        $totalcost = $this->getTotalCost($accountcode);
 
 		$data = [
 			'name' => $name,
 			'accountcode' => $accountcode,
 			'totalcalls' => $totalcalls,
+            'totalcost' => $totalcost,
 			'calls' => $calls,
             'summary' => $summary,
 			'start_date' => $this->formatDate($start_date),
@@ -171,6 +173,8 @@ class ReportController extends Controller
         $data = [
             'number' => $number,
             'calls' => $calls,
+            'totalcalls' => $this->getTotalCallsMadeByPhoneNumber($number),
+            'totalcost' => $this->getTotalCostByNumber($number),
             'start_date' => $this->formatDate($start_date),
             'end_date' => $this->formatDate($end_date)
         ];
@@ -212,6 +216,60 @@ class ReportController extends Controller
 				    ->get();
 
 		return $callcount->pop()['totalcalls'];
+    }
+
+    private function getTotalCallsMadeByPhoneNumber($number)
+    {   
+        $start_date = session('start_date');
+        $end_date = session('end_date');
+
+        $callcount = Call::select(DB::raw('count(accountcode) as totalcalls'))
+                    ->where('dst', '=', $number) 
+                    ->where('calldate', '>=', "$start_date 00:00:00")
+                    ->where('calldate', '<=', "$end_date 23:59:00")
+                    ->where('outbound_cnum', '!=', '')
+                    ->where('disposition', '=', 'ANSWERED')
+                    ->get();
+
+        return $callcount->pop()['totalcalls'];
+    }
+
+    private function getTotalCost($accountcode)
+    {   
+        $start_date = session('start_date');
+        $end_date = session('end_date');
+
+        $cost = Call::select(DB::raw('sum(billsec) as totalcost'))
+                    ->where('accountcode', $accountcode)
+                    ->where('calldate', '>=', "$start_date 00:00:00")
+                    ->where('calldate', '<=', "$end_date 23:59:00")
+                    ->where('outbound_cnum', '!=', '')
+                    ->where('disposition', '=', 'ANSWERED')
+                    ->get();
+
+        $minutes = ($cost->pop()['totalcost'] / 60); // convert billing seconds to minutes.
+        $totalCost = $minutes * env('AVG_COST_PER_MIN');
+
+        return "$" . money_format('%i', $totalCost);
+    }
+
+    private function getTotalCostByNumber($number)
+    {   
+        $start_date = session('start_date');
+        $end_date = session('end_date');
+
+        $cost = Call::select(DB::raw('sum(billsec) as totalcost'))
+                    ->where('dst', '=', $number) 
+                    ->where('calldate', '>=', "$start_date 00:00:00")
+                    ->where('calldate', '<=', "$end_date 23:59:00")
+                    ->where('outbound_cnum', '!=', '')
+                    ->where('disposition', '=', 'ANSWERED')
+                    ->get();
+
+        $minutes = ($cost->pop()['totalcost'] / 60); // convert billing seconds to minutes.
+        $totalCost = $minutes * env('AVG_COST_PER_MIN');
+
+        return "$" . money_format('%i', $totalCost);
     }
 
     /**

@@ -27,7 +27,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="/">Reports</a></li>
-            <li><a href="accountcodes">Account Codes</a></li>
+            <li><a href="/accountcodes">Account Codes</a></li>
             <li><a href="#">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->

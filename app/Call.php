@@ -29,4 +29,11 @@ class Call extends Model
         return sprintf('%02d:%02d:%02d', ($this->totaltime / 3600), 
             ($this->totaltime / 60 % 60), $this->totaltime % 60); 
     }
+
+    public function calculateCost()
+    {   
+        $minutes = ($this->totaltime / 60); // convert billing seconds to minutes.
+        $cost = $minutes * env('AVG_COST_PER_MIN');
+        return "$" . money_format('%i', $cost);
+    }
 }

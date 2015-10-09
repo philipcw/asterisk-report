@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.home')
 
 @section('content')
 	<p class="lead text-center">Select a date range to generate a report.</p>

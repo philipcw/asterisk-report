@@ -6,13 +6,14 @@
 	<br>
 	<div class="row">
 		<div class="col-sm-6">
-			<p class="lead text-center">Persons who made the most calls</p>
+			<p class="lead text-center">Persons who made the most calls &nbsp; <a href="/export/accountcodes" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-export"></span> Export</a></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th data-sort="string">Name</th>
 						<th class="text-center" data-sort="int"># of calls</th>
 						<th class="text-center" data-sort="string">Total Time</th>
+						<th class="text-center" data-sort="string">Total Cost</th>
 					</tr>
 				</thead>
 
@@ -28,13 +29,14 @@
 			</table>	
 		</div>
 		<div class="col-sm-6">
-			<p class="lead text-center">Numbers called the most</p>
+			<p class="lead text-center">Numbers called the most &nbsp; <a href="/export/numbers" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-export"></span> Export</a></p>
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th>Number</th>
 						<th class="text-center" data-sort="int"># of calls</th>
 						<th class="text-center" data-sort="string">Total Time</th>
+						<th class="text-center" data-sort="string">Total Cost</th>
 					</tr>
 				</thead>
 

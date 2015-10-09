@@ -7,6 +7,7 @@
 			<h4><small>Date:</small> {{ $start_date }} - {{ $end_date }}</h4>
 			<h4><small>Total Calls:</small> {{ $totalcalls }}</h4>	
 			<h4><small>Total Cost:</small> {{ $totalcost }}</h4>
+			<a href="#" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-export"></span> Export</a>
 		</div>
 		<div class="col-sm-6 text-right">
 			<br>

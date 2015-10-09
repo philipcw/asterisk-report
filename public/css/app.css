@@ -6008,12 +6008,10 @@ th[data-sort] {
   border: none;
   background: none; }
 
-/* Customize container 
+/* Customize container */
 @media (min-width: 768px) {
-  .container {
+  .container-small {
     max-width: 730px;
-  }
-}
-*/
+    margin: 0px auto; } }
 
 /*# sourceMappingURL=app.css.map */

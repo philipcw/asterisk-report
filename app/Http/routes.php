@@ -31,4 +31,7 @@ Route::get('accountcode/{id}/edit', 'AccountCodeController@edit');
 Route::patch('accountcode/{id}', 'AccountCodeController@update');
 Route::delete('accountcode/{id}', 'AccountCodeController@destroy');
 
+Route::get('export/accountcodes', 'ExportController@usingAccountCodes');
+Route::get('export/numbers', 'ExportController@usingPhoneNumbers');
+
 

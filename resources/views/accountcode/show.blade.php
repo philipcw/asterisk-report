@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layout.internal')
 
 @section('content')
 	<div class="row">
@@ -36,8 +36,8 @@
 		</div>
 
 		<div class="col-md-4 col-md-offset-1">
-			<p class="lead">Edit account code - <strong>{{ $account->accountcode }}</strong></p>
-
+			<p class="lead">Add new account code.</p>
+			
 			@if (count($errors) > 0)
 			    <div class="alert alert-danger">
 			        <ul>
@@ -48,14 +48,15 @@
 			    </div>
 			@endif
 
-			<form action="/accountcode/{{ $account->id }}" method="POST">
+			<form action="/accountcode" method="POST">
 				{!! csrf_field() !!}
-				{!! method_field('PATCH') !!}
 				<div class="form-group">
-					<input type="text" class="form-control" name="name" placeholder="Name" value="{{ $account->name }}" required>	
+					<input type="text" class="form-control" name="name" placeholder="Name">	
 				</div>
-				
-				<button type="submit" class="btn btn-primary">Update</button>
+				<div class="form-group">
+					<input type="text" class="form-control" name="accountcode" placeholder="Account Code">	
+				</div>
+				<button type="submit" class="btn btn-primary"> Add new code</button>
 			</form>
 		</div>
 	</div>

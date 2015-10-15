@@ -11,19 +11,10 @@
 |
 */
 
-
-
-/**
- *  / - show date picker.
- *  report - list top ten account codes with the most calls for the selected date range.
- *  report/{account-code} - list all calls for the selected account code within the specifed date range.
- */
-
-Route::get('/', 'ReportController@index');
-Route::post('report', 'ReportController@report');
-Route::get('report/full', 'ReportController@fullreport');
-Route::get('report/accountcode/{accountcode}', 'ReportController@usingAccountCode');
-Route::get('report/phonenumber/{number}', 'ReportController@usingPhoneNumber');
+Route::get('/', 'ReportController@home');
+Route::post('report', 'ReportController@summary');
+Route::get('{accountcode}/report', 'ReportController@accountCodes');
+Route::get('{phonenumber}/report', 'ReportController@phoneNumbers');
 
 Route::get('accountcodes', 'AccountCodeController@index');
 Route::post('accountcode', 'AccountCodeController@store');
@@ -31,7 +22,4 @@ Route::get('accountcode/{id}/edit', 'AccountCodeController@edit');
 Route::patch('accountcode/{id}', 'AccountCodeController@update');
 Route::delete('accountcode/{id}', 'AccountCodeController@destroy');
 
-Route::get('export/accountcodes', 'ExportController@usingAccountCodes');
-Route::get('export/numbers', 'ExportController@usingPhoneNumbers');
-
-
+Route::get('download/report', 'DownloadController@report');

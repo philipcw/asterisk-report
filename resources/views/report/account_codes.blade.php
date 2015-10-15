@@ -1,13 +1,12 @@
-@extends('layout')
+@extends('layout.internal')
 
 @section('content')
 	<div class="row">
 		<div class="col-sm-6">
-			<h2>{{ $name }}</h2>
-			<h4><small>Date:</small> {{ $start_date }} - {{ $end_date }}</h4>
-			<h4><small>Total Calls:</small> {{ $totalcalls }}</h4>	
-			<h4><small>Total Cost:</small> {{ $totalcost }}</h4>
-			<a href="#" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-export"></span> Export</a>
+			<h2>{{ $report['reportHeadings']['name'] }}</h2>
+			<h4><small>Date:</small> {{ $dates['start'] }} - {{ $dates['end'] }}</h4>
+			<h4><small>Total Calls:</small> {{ $report['reportHeadings']['totalCalls'] }}</h4>	
+			<h4><small>Total Cost:</small> ${{ $report['reportHeadings']['totalCost'] }}</h4>
 		</div>
 		<div class="col-sm-6 text-right">
 			<br>
@@ -26,17 +25,17 @@
 						<th>Number</th>
 						<th data-sort="int">Total Calls</th>
 						<th data-sort="string">Duration</th>
-						<th>Cost</th>
+						<th>Cost ($)</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					@foreach ($summary as $number)
+					@foreach ($report['callSummary'] as $call)
 						<tr>
-							<td>{{ substr($number->dst, 1)  }}</td>
-							<td>{{ $number->totalcalls }}</td>
-							<td>{{ $number->formatTime() }}</td>
-							<td>{{ $number->calculateCost() }}</td>
+							<td>{{ substr($call->dst, 1)  }}</td>
+							<td>{{ $call->totalcalls }}</td>
+							<td>{{ $call->formatTime() }}</td>
+							<td>{{ $call->formatCost() }}</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -50,17 +49,17 @@
 						<th>Date / Time</th>
 						<th>Number</th>
 						<th data-sort="string">Duration</th>
-						<th>Cost</th>
+						<th>Cost ($)</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					@foreach ($calls as $call)
+					@foreach ($report['callList'] as $call)
 						<tr>
 							<td>{{ $call->calldate->toDayDateTimeString() }}</td>
 							<td>{{ substr($call->dst, 1) }}</td>
 							<td>{{ $call->formatTime() }}</td>
-							<td>{{ $call->calculateCost() }}</td>
+							<td>{{ $call->formatCost() }}</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -68,5 +67,7 @@
 		</div>
 	</div>
 	<br><br>
-	
+	<footer>
+		<a href="#top" class="go-top" title="Back to Top"><span class="glyphicon glyphicon-chevron-up"></span></a>
+	</footer>
 @stop

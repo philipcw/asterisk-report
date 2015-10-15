@@ -6008,10 +6008,36 @@ th[data-sort] {
   border: none;
   background: none; }
 
+.go-top {
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.5);
+  bottom: 48px;
+  display: none;
+  height: 48px;
+  position: fixed;
+  right: 48px;
+  transition: background-color 0.2s ease-in-out;
+  width: 48px; }
+
+.go-top:hover {
+  background-color: #f54128;
+  background-color: rgba(0, 0, 0, 0.7); }
+
+.go-top span {
+  color: white;
+  display: inline-block;
+  font-size: 24px;
+  left: 50%;
+  position: absolute;
+  height: 24px;
+  margin: -16px 0 0 -12px;
+  top: 50%;
+  width: 24px; }
+
 /* Customize container */
 @media (min-width: 768px) {
   .container-small {
-    max-width: 730px;
+    max-width: 720px;
     margin: 0px auto; } }
 
 /*# sourceMappingURL=app.css.map */

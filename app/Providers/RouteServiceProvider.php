@@ -24,8 +24,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
+        //min digits a phonenumber should have
+        $router->pattern('phonenumber', '[0-9]{8,}');
 
+        //an account code should be exactly four (4) digits
+        $router->pattern('accountcode', '[0-9]{4}');
+        
         parent::boot($router);
     }
 

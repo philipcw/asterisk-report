@@ -6,283 +6,105 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB;
 use Carbon\Carbon;
-use App\Call;
-use App\AccountCode;
-
+use App\Report;
 
 class ReportController extends Controller
-{
+{   
+    /**
+     * [__construct description]
+     */
+    public function __construct()
+    {
+        $this->middleware('date.flash', ['only' => 'summary']);
+    }
 
-	/**
-	 * [index description]
-	 * @return [type] [description]
-	 */
-	public function index()
+    /**
+     * [home description]
+     * @return [type] [description]
+     */
+	public function home()
 	{
 		return view('home');
 	}
 
-	/**
-	 * [index description]
-	 * @return [type] [description]
-	 */
-    public function report(Request $request)
-    {	
-    	$start_date = $request->input('start-date');
-    	$end_date = $request->input('end-date');
-
-    	$calls = Call::select(DB::raw('account_codes.name, src, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totaltime'))
-				   ->join('account_codes', 'cdr.accountcode', '=', 'account_codes.accountcode')
-				   ->where('calldate', '>=', "$start_date 00:00:00")
-				   ->where('calldate', '<=', "$end_date 23:59:00")
-				   ->where('cdr.accountcode', '!=', '')
-				   ->where('outbound_cnum', '!=', '')
-				   ->where('disposition', '=', 'ANSWERED')
-				   ->groupBy('cdr.accountcode')
-				   ->orderByRaw('sum(billsec) desc')
-                   ->take(10)
-				   ->get();	
-
-        $top_numbers = Call::select(DB::raw('dst, count(dst) as totalcalls, sum(billsec) as totaltime'))
-                   ->where('calldate', '>=', "$start_date 00:00:00")
-                   ->where('calldate', '<=', "$end_date 23:59:00") 
-                   ->where('outbound_cnum', '!=', '')
-                   ->where('disposition', '=', 'ANSWERED')
-                   ->groupBy('dst')
-                   ->orderByRaw('count(dst) desc')
-                   ->take(10)
-                   ->get();
-
-
-		$request->session()->put('start_date', $start_date);
-		$request->session()->put('end_date', $end_date);
-
-		$data = [
-			'calls' => $calls,
-            'top_numbers' => $top_numbers,
-			'start_date' => $this->formatDate($start_date),
-			'end_date' => $this->formatDate($end_date)
-		];
-
-		return view('report', $data);	
-    }
-
-
     /**
-     * [index description]
+     * [summary description]
      * @return [type] [description]
      */
-    public function fullreport(Request $request)
+    public function summary()
     {   
-        $start_date = $request->session()->get('start_date');
-        $end_date = $request->session()->get('end_date');
-
-        $calls = Call::select(DB::raw('account_codes.name, src, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totaltime'))
-                   ->join('account_codes', 'cdr.accountcode', '=', 'account_codes.accountcode')
-                   ->where('calldate', '>=', "$start_date 00:00:00")
-                   ->where('calldate', '<=', "$end_date 23:59:00")
-                   ->where('cdr.accountcode', '!=', '')
-                   ->where('outbound_cnum', '!=', '')
-                   ->where('disposition', '=', 'ANSWERED')
-                   ->groupBy('cdr.accountcode')
-                   ->orderByRaw('sum(billsec) desc')
-                   ->get(); 
-
-        $top_numbers = Call::select(DB::raw('dst, count(dst) as totalcalls, sum(billsec) as totaltime'))
-                   ->where('calldate', '>=', "$start_date 00:00:00")
-                   ->where('calldate', '<=', "$end_date 23:59:00") 
-                   ->where('outbound_cnum', '!=', '')
-                   ->where('disposition', '=', 'ANSWERED')
-                   ->groupBy('dst')
-                   ->orderByRaw('count(dst) desc')
-                   ->get();
-
-        $data = [
-            'calls' => $calls,
-            'top_numbers' => $top_numbers,
-            'start_date' => $this->formatDate($start_date),
-            'end_date' => $this->formatDate($end_date)
-        ];
-
-        return view('full_report', $data);   
-    }
-
-    
-    /**
-     * [report description]
-     * @return [type] [description]
-     */
-    public function usingAccountCode(Request $request, $accountcode)
-    {
-    	$start_date = $request->session()->get('start_date');
-    	$end_date = $request->session()->get('end_date');
-
-    	$calls = Call::select(DB::raw('calldate, dst, billsec as totaltime'))
-				   ->where('calldate', '>=', "$start_date 00:00:00")
-				   ->where('calldate', '<=', "$end_date 23:59:00")
-				   ->where('accountcode', '=', $accountcode)
-				   ->where('outbound_cnum', '!=', '')
-				   ->where('disposition', '=', 'ANSWERED')
-				   ->orderBy('calldate', 'asc')
-				   ->get();
-
-        $summary = Call::select(DB::raw('dst, count(dst) as totalcalls, sum(billsec) as totaltime'))
-                    ->where('calldate', '>=', "$start_date 00:00:00")
-                    ->where('calldate', '<=', "$end_date 23:59:00")
-                    ->where('accountcode', '=', $accountcode)
-                    ->where('outbound_cnum', '!=', '')
-                    ->where('disposition', '=', 'ANSWERED')
-                    ->groupBy('dst')
-                    ->orderByRaw('count(dst) desc')
-                    ->get();
-
-		$name = $this->getAccountName($accountcode);
-		$totalcalls = $this->getTotalCallsMade($accountcode);
-        $totalcost = $this->getTotalCost($accountcode);
+        $dates = $this->retrieveDates();
+        $report = Report::generateSummary($dates);
 
 		$data = [
-			'name' => $name,
-			'accountcode' => $accountcode,
-			'totalcalls' => $totalcalls,
-            'totalcost' => $totalcost,
-			'calls' => $calls,
-            'summary' => $summary,
-			'start_date' => $this->formatDate($start_date),
-			'end_date' => $this->formatDate($end_date)
+			'report' => $report,
+			'dates' => $this->formatDates()
 		];
-    	
-    	return view('report_details', $data);
+
+		return view('report.summary', $data);	
     }
 
-
-    public function usingPhoneNumber(Request $request, $number)
+    /**
+     * [accountCodes description]
+     * @param  [type] $accountcode [description]
+     * @return [type]              [description]
+     */
+    public function accountCodes($accountcode)
     {
-        $start_date = $request->session()->get('start_date');
-        $end_date = $request->session()->get('end_date');
-
-        $calls = Call::select(DB::raw('calldate, account_codes.name, billsec as totaltime'))
-                    ->join('account_codes', 'cdr.accountcode', '=', 'account_codes.accountcode')
-                    ->where('calldate', '>=', "$start_date 00:00:00")
-                    ->where('calldate', '<=', "$end_date 23:59:00")  
-                    ->where('dst', '=', $number) 
-                    ->where('disposition', '=', 'ANSWERED')  
-                    ->orderBy('calldate', 'desc')
-                    ->get();
+        $dates = $this->retrieveDates();
+        $report = Report::generateAccountCodes($accountcode, $dates);
 
         $data = [
-            'number' => $number,
-            'calls' => $calls,
-            'totalcalls' => $this->getTotalCallsMadeByPhoneNumber($number),
-            'totalcost' => $this->getTotalCostByNumber($number),
-            'start_date' => $this->formatDate($start_date),
-            'end_date' => $this->formatDate($end_date)
+            'report' => $report,
+            'dates' => $this->formatDates()
         ];
         
-        return view('report_by_phone', $data);
+        return view('report.account_codes', $data);
     }
 
+    /**
+     * [phoneNumbers description]
+     * @param  [type] $number [description]
+     * @return [type]         [description]
+     */
+    public function phoneNumbers($number)
+    {   
+        $dates = $this->retrieveDates();
+        $report = Report::generateAllCalls($number, $dates);
+
+        $data = [
+            'report' => $report,
+            'dates' => $this->formatDates()
+        ];
+        
+        return view('report.phone_numbers', $data);
+    }
 
     /**
-     * [getAccountName description]
-     * @param  [type] $accountcode [description]
-     * @return [type]              [description]
+     * [retrieveDates description]
+     * @return [type] [description]
      */
-    private function getAccountName($accountcode)
+    private function retrieveDates()
     {
-    	$account = AccountCode::select('name')
-    						->where('accountcode', $accountcode)
-    						->get();
-
-    	return $account->pop()['name'];	
+        $dates['start'] = session('start-date');
+        $dates['end'] = session('end-date');
+        return $dates;
     }
-
+    
     /**
-     * [getTotalCallsMade description]
-     * @param  [type] $accountcode [description]
-     * @return [type]              [description]
+     * [formatDates description]
+     * @return [type] [description]
      */
-    private function getTotalCallsMade($accountcode)
-    {	
-    	$start_date = session('start_date');
-    	$end_date = session('end_date');
-
-    	$callcount = Call::select(DB::raw('count(accountcode) as totalcalls'))
-    				->where('accountcode', $accountcode)
-    				->where('calldate', '>=', "$start_date 00:00:00")
-					->where('calldate', '<=', "$end_date 23:59:00")
-				    ->where('outbound_cnum', '!=', '')
-				    ->where('disposition', '=', 'ANSWERED')
-				    ->get();
-
-		return $callcount->pop()['totalcalls'];
-    }
-
-    private function getTotalCallsMadeByPhoneNumber($number)
+    private function formatDates()
     {   
-        $start_date = session('start_date');
-        $end_date = session('end_date');
+        foreach ($this->retrieveDates() as $key => $date) 
+        {
+            $explode = explode("-", $date);
+            $carbonMade = Carbon::createFromDate($explode[0], $explode[1], $explode[2]);
+            $dates[$key] = $carbonMade->toFormattedDateString();
+        }
 
-        $callcount = Call::select(DB::raw('count(accountcode) as totalcalls'))
-                    ->where('dst', '=', $number) 
-                    ->where('calldate', '>=', "$start_date 00:00:00")
-                    ->where('calldate', '<=', "$end_date 23:59:00")
-                    ->where('outbound_cnum', '!=', '')
-                    ->where('disposition', '=', 'ANSWERED')
-                    ->get();
-
-        return $callcount->pop()['totalcalls'];
-    }
-
-    private function getTotalCost($accountcode)
-    {   
-        $start_date = session('start_date');
-        $end_date = session('end_date');
-
-        $cost = Call::select(DB::raw('sum(billsec) as totalcost'))
-                    ->where('accountcode', $accountcode)
-                    ->where('calldate', '>=', "$start_date 00:00:00")
-                    ->where('calldate', '<=', "$end_date 23:59:00")
-                    ->where('outbound_cnum', '!=', '')
-                    ->where('disposition', '=', 'ANSWERED')
-                    ->get();
-
-        $minutes = ($cost->pop()['totalcost'] / 60); // convert billing seconds to minutes.
-        $totalCost = $minutes * env('AVG_COST_PER_MIN');
-
-        return "$" . money_format('%i', $totalCost);
-    }
-
-    private function getTotalCostByNumber($number)
-    {   
-        $start_date = session('start_date');
-        $end_date = session('end_date');
-
-        $cost = Call::select(DB::raw('sum(billsec) as totalcost'))
-                    ->where('dst', '=', $number) 
-                    ->where('calldate', '>=', "$start_date 00:00:00")
-                    ->where('calldate', '<=', "$end_date 23:59:00")
-                    ->where('outbound_cnum', '!=', '')
-                    ->where('disposition', '=', 'ANSWERED')
-                    ->get();
-
-        $minutes = ($cost->pop()['totalcost'] / 60); // convert billing seconds to minutes.
-        $totalCost = $minutes * env('AVG_COST_PER_MIN');
-
-        return "$" . money_format('%i', $totalCost);
-    }
-
-    /**
-     * [formatDate description]
-     * @param  [type] $date [description]
-     * @return [type]       [description]
-     */
-    private function formatDate($date)
-    {	
-    	$dateExploded = explode("-", $date);
-    	$carbonDate = Carbon::createFromDate($dateExploded[0], $dateExploded[1], $dateExploded[2]);
-    	$formattedDate = $carbonDate->toFormattedDateString();
-    	return $formattedDate;
-    }
+        return $dates;
+    }   
 }

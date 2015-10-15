@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layout.internal')
 
 @section('content')
 	<div class="row">
@@ -14,11 +14,10 @@
 
 	<div class="row">
 		<div class="col-sm-4">
-			<h2><small>#: </small>{{ substr($number, 1) }}</h2>
-			<h4><small>Date:</small> {{ $start_date }} - {{ $end_date }}</h4>
-			<h4><small>Total Calls:</small> {{ $totalcalls }} </h4>	
-			<h4><small>Total Cost:</small> {{ $totalcost }}</h4>
-			<a href="#" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-export"></span> Export</a>	
+			<h2><small>#: </small>{{ substr($report['reportHeadings']['number'], 1) }}</h2>
+			<h4><small>Date:</small> {{ $dates['start'] }} - {{ $dates['end'] }}</h4>
+			<h4><small>Total Calls:</small> {{ $report['reportHeadings']['totalCalls'] }} </h4>	
+			<h4><small>Total Cost:</small> {{ $report['reportHeadings']['totalCost'] }}</h4>
 		</div>
 		<div class="col-sm-8">
 			<p class="lead">Detailed call list.</p>
@@ -27,18 +26,18 @@
 					<tr>
 						<th>Date / Time</th>
 						<th data-sort="string">Duration</th>
-						<th data-sort="string">Cost</th>
+						<th>Cost ($)</th>
 						<th data-sort="string">Person</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					@foreach ($calls as $call)
+					@foreach ($report['allCalls'] as $call)
 						<tr>
 							<td>{{ $call->calldate->toDayDateTimeString() }}</td>
 							<td>{{ $call->formatTime() }}</td>
-							<td>{{ $call->calculateCost() }}</td>
-							<td>{{ ucwords(strtolower($call->name)) }}</td>
+							<td>{{ $call->formatCost() }}</td>
+							<td>{{ $call->name }}</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -46,4 +45,7 @@
 		</div>
 	</div>
 	<br><br>
+	<footer>
+		<a href="#top" class="go-top" title="Back to Top"><span class="glyphicon glyphicon-chevron-up"></span></a>
+	</footer>
 @stop

@@ -26,9 +26,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="/">Reports</a></li>
+            <li><a href="/">Reports</a></li>
             <li><a href="/accountcodes">Account Codes</a></li>
-            <li><a href="#">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -46,6 +45,7 @@
     <script src="/js/moment.min.js"></script>
     <script src="/js/bootstrap-datetimepicker.min.js"></script>
     <script src="/js/stupidtable.min.js"></script>
+    <script src="/js/scripts.js"></script>
 
     <script type="text/javascript">
         $(function () {

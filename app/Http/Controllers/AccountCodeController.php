@@ -18,8 +18,8 @@ class AccountCodeController extends Controller
      */
     public function index()
     {
-    	$accountcodes = AccountCode::all();
-    	return view('accountcodes', ['accountcodes' => $accountcodes]);
+    	$accountcodes = AccountCode::orderBy('name', 'asc')->get();
+    	return view('accountcode.show', ['accountcodes' => $accountcodes]);
     }
 
     /**
@@ -46,14 +46,14 @@ class AccountCodeController extends Controller
     public function edit($id)
     {   
         $account = AccountCode::find($id);
-        $accountcodes = AccountCode::all();
+        $accountcodes = AccountCode::orderBy('name', 'asc')->get();
 
         $data = [
             'account' => $account,
             'accountcodes' => $accountcodes
         ];
 
-        return view('accountcode_edit', $data);
+        return view('accountcode.edit', $data);
     }
     
     /**

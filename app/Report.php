@@ -24,9 +24,10 @@ class Report extends Model
     protected $dates = ['calldate'];
 
     /**
-     * [generateSummary description]
-     * @param  [type] $dates [description]
-     * @return [type]        [description]
+     * Generates a report for all numbers called and account codes used for
+     * the specified dates.
+     * @param  Array $dates : contains both start and end dates
+     * @return Array
      */
     public static function generateSummary($dates)
     {   
@@ -36,7 +37,13 @@ class Report extends Model
         return $report;
     }
 
-
+    /**
+     * Generates a detailed report for the specified dates using the given 
+     * account code. This report consist of all calls using this account.
+     * @param  Int $accountcode
+     * @param  Array $dates
+     * @return Array
+     */
     public static function generateAccountCodes($accountcode, $dates)
     {
         $report['callSummary'] = self::getCallSummary($accountcode, $dates);
@@ -53,7 +60,13 @@ class Report extends Model
         return $report;
     }
 
-
+    /**
+     * Generates a detailed report for the specified dates using the given
+     * phone number. This report consist of all calls to this number.
+     * @param  Int $number
+     * @param  Array $dates
+     * @return Array
+     */
     public static function generateAllCalls($number, $dates)
     {
         $report['allCalls'] = self::getAllCallsToNumber($number, $dates);
@@ -67,7 +80,10 @@ class Report extends Model
         return $report;
     }
 
-
+    /**
+     * Calcuates the cost for a given call. 
+     * @return String
+     */
     public function formatCost()
     {      
         $minutes = ($this->totaltime / 60);
@@ -75,14 +91,21 @@ class Report extends Model
         return number_format($cost, 2);
     }
 
-
+    /**
+     * Converts a unix timestamp to something more friendly.
+     * @return String
+     */
     public function formatTime()
     {   
         return sprintf('%02d:%02d:%02d', ($this->totaltime / 3600), 
             ($this->totaltime / 60 % 60), $this->totaltime % 60); 
     }
 
-
+    /**
+     * Return all phone numbers called for the specified dates.
+     * @param  Array $dates
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     public static function getNumbersCalled($dates)
     {
         return self::select(DB::raw('dst, count(dst) as totalcalls, sum(billsec) as totaltime'))
@@ -95,7 +118,11 @@ class Report extends Model
                    ->get();
     }
 
-
+    /**
+     * Return all account codes used within the specified dates.
+     * @param  Array $dates
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     public static function getAccountCodesUsed($dates)
     {
         return self::select(DB::raw('account_codes.name, cdr.accountcode, count(cdr.accountcode) as totalcalls, sum(billsec) as totaltime'))
@@ -110,7 +137,13 @@ class Report extends Model
                    ->get(); 
     }
 
-
+    /**
+     * Return an overview of calls made using the account code within 
+     * the specified dates.
+     * @param  Int $accountCode
+     * @param  Array $dates
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     private static function getCallSummary($accountCode, $dates)
     {
         return self::select(DB::raw('dst, count(dst) as totalcalls, sum(billsec) as totaltime'))
@@ -124,7 +157,13 @@ class Report extends Model
                 ->get();
     }
 
-
+    /**
+     * Return a detailed list of all calls made using account code within
+     * the specified dates.
+     * @param  Int $accountCode
+     * @param  Array $dates
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     private static function getCallList($accountCode, $dates)
     {
         return self::select(DB::raw('calldate, dst, billsec as totaltime'))
@@ -137,7 +176,12 @@ class Report extends Model
                ->get();
     }
 
-
+    /**
+     * Return calls made to this number within the specified dates. 
+     * @param  Int $number
+     * @param  Array $dates
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     public static function getAllCallsToNumber($number, $dates)
     {
         return self::select(DB::raw('calldate, account_codes.name, billsec as totaltime'))
@@ -150,7 +194,11 @@ class Report extends Model
                 ->get();
     }
 
-
+    /**
+     * Return the total cost for all calls given.
+     * @param  Illuminate\Database\Eloquent\Collection $collection
+     * @return String
+     */
     private static function calculateTotalCost($collection)
     {   
         $calls = $collection->all();

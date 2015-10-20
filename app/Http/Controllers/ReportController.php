@@ -12,7 +12,8 @@ use App\Report;
 class ReportController extends Controller
 {   
     /**
-     * [__construct description]
+     * On instantiation call the 'date.flush ' middleware which 
+     * validates and flashes the given dates.
      */
     public function __construct()
     {
@@ -20,8 +21,8 @@ class ReportController extends Controller
     }
 
     /**
-     * [home description]
-     * @return [type] [description]
+     * Display date pickers used to generate a report.
+     * @return \Illuminate\Http\Response
      */
 	public function home()
 	{
@@ -29,8 +30,9 @@ class ReportController extends Controller
 	}
 
     /**
-     * [summary description]
-     * @return [type] [description]
+     * Display an overview of numbers called and account codes 
+     * used.
+     * @return \Illuminate\Http\Response
      */
     public function summary()
     {   
@@ -46,9 +48,9 @@ class ReportController extends Controller
     }
 
     /**
-     * [accountCodes description]
-     * @param  [type] $accountcode [description]
-     * @return [type]              [description]
+     * Display a report for the given account code. 
+     * @param  Int $accountcode
+     * @return \Illuminate\Http\Response
      */
     public function accountCodes($accountcode)
     {
@@ -64,9 +66,9 @@ class ReportController extends Controller
     }
 
     /**
-     * [phoneNumbers description]
-     * @param  [type] $number [description]
-     * @return [type]         [description]
+     * Display a report for the given phone number.
+     * @param  Int $number
+     * @return \Illuminate\Http\Response
      */
     public function phoneNumbers($number)
     {   
@@ -82,8 +84,8 @@ class ReportController extends Controller
     }
 
     /**
-     * [retrieveDates description]
-     * @return [type] [description]
+     * Return dates stored in the session.
+     * @return Array $dates
      */
     private function retrieveDates()
     {
@@ -93,8 +95,8 @@ class ReportController extends Controller
     }
     
     /**
-     * [formatDates description]
-     * @return [type] [description]
+     * Format the dates stored in session.
+     * @return Array $dates
      */
     private function formatDates()
     {   

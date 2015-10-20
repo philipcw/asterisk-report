@@ -13,8 +13,8 @@ class AccountCodeController extends Controller
 {	
 
     /**
-     * [index description]
-     * @return [type] [description]
+     * Display all account codes.
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -23,9 +23,9 @@ class AccountCodeController extends Controller
     }
 
     /**
-     * [store description]
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * Save a newly created account code.
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {   
@@ -39,7 +39,7 @@ class AccountCodeController extends Controller
     }
 
     /**
-     * [edit description]
+     * Edit the specified account code.
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
@@ -57,10 +57,10 @@ class AccountCodeController extends Controller
     }
     
     /**
-     * [update description]
-     * @param  Request $request [description]
-     * @param  [type]  $id      [description]
-     * @return [type]           [description]
+     * Save modifications for specified account code.
+     * @param  Request $request
+     * @param  Int $id
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {   
@@ -76,9 +76,9 @@ class AccountCodeController extends Controller
     }
 
     /**
-     * [destroy description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * Delete the specified account code.
+     * @param  Int $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

@@ -10,11 +10,13 @@ use App\Report;
 
 class DownloadController extends Controller
 {	
+    /**
+     * Creates an excel document with a report of all numbers called
+     * and account codes used.
+     */
     public function report()
     {   
         Excel::create(time() . '_report', function($excel) {
-            
-
             $excel->sheet('persons', function($sheet) {
                 $dates = self::retrieveDates();
                 $persons = Report::getAccountCodesUsed($dates);
@@ -30,8 +32,8 @@ class DownloadController extends Controller
     }
 
     /**
-     * [retrieveDates description]
-     * @return [type] [description]
+     * Get the dates stored in session.
+     * @return Array $dates
      */
     private function retrieveDates()
     {

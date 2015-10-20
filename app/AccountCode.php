@@ -14,9 +14,9 @@ class AccountCode extends Model
     protected $fillable = ['name', 'accountcode'];
 
     /**
-     * [getName description]
-     * @param  [type] $accountcode [description]
-     * @return [type]              [description]
+     * Get the name associated with the specified account code.
+     * @param  int $accountcode 
+     * @return string 
      */
     public static function getName($accountcode)
     {

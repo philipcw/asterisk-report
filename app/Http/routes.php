@@ -11,15 +11,18 @@
 |
 */
 
+/*** Reports ***/
 Route::get('/', 'ReportController@home');
 Route::post('report', 'ReportController@summary');
 Route::get('{accountcode}/report', 'ReportController@accountCodes');
 Route::get('{phonenumber}/report', 'ReportController@phoneNumbers');
 
+/*** Account Codes ***/
 Route::get('accountcodes', 'AccountCodeController@index');
 Route::post('accountcode', 'AccountCodeController@store');
 Route::get('accountcode/{id}/edit', 'AccountCodeController@edit');
 Route::patch('accountcode/{id}', 'AccountCodeController@update');
 Route::delete('accountcode/{id}', 'AccountCodeController@destroy');
 
+/*** Download ***/
 Route::get('download/report', 'DownloadController@report');
